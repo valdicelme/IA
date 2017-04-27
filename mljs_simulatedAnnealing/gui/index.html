@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Fernando Andrade">
+    <title>ml.js</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/gui.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">ml.js</a>
+                </div>
+            </div>
+        </nav>
+        <!-- /.navbar-fixed-top -->
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div id="navbar" class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-tabs tabs-left">
+                    <li class="active"><a href="#dashboard" data-toggle="tab">Dashboard</a>
+                    </li>
+                    <li><a href="#dataset" data-toggle="tab">Dataset</a>
+                    </li>
+                    <li class="disabled enable-on-load-dataset"><a href="#cluster" data-toggle="tab">Agrupamento</a>
+                    </li>
+                    <li class="disabled enable-on-load-dataset"><a href="#classify" data-toggle="tab">Classificação</a>
+                    </li>
+                    <li class="disabled enable-on-load-dataset"><a href="#regression" data-toggle="tab">Regressão</a>
+                    </li>
+                    <li class="disabled enable-on-load-dataset"><a href="#localsearch" data-toggle="tab">Busca Local</a>
+                    </li>
+                </ul>
+                <!-- /.nav-tabs.tabs-left -->
+
+            </div>
+            <!-- /.sidebar -->
+
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+                <div class="tab-content">
+                    <div id="dashboard" class="tab-pane active">
+                        <h1 class="page-header">Dashboard</h1>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Vamos começar!</strong> Primeiro selecione sua base no menu Dataset.
+                        </div>
+                    </div>
+                    <!-- /.tab-pane#dashboard -->
+
+                    <div id="dataset" class="tab-pane">
+                        <h1 class="page-header">Dataset</h1>
+
+                        <div id="dataset-view" class="item-view">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div role="tabpanel" class="tab-panel-model">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active">
+                                                <a href="#dataset-file" aria-controls="dataset-file" role="tab" data-toggle="tab">Arquivo</a>
+                                            </li>
+                                            <li role="presentation" class="disabled enable-on-load-dataset">
+                                                <a href="#dataset-visualize" aria-controls="dataset-visualize" role="tab" data-toggle="tab">Visualizar</a>
+                                            </li>
+                                        </ul>
+                                        <!-- ./nav-tabs -->
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content tab-content-dataset">
+                                            <div role="tabpanel" class="tab-pane active" id="dataset-file">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <div id="w-drop-zone">
+                                                            <div id="drop-zone">
+                                                                <p>Arraste e solte o arquivo aqui</p>
+                                                                <p>ou click para selecionar manualmente</p>
+                                                                <p style="color: #1b1919; font-size: 14px">(CSV ou ARFF)</p>
+                                                                <input type="file" id="data_file">
+                                                            </div>
+                                                        </div>
+                                                        <div id="w-data-file-name" style="display:none;">
+                                                            <label for="data_file_name">Arquivo selecionado</label>
+                                                            <input type="text" disabled id="data_file_name" class="form-control">
+                                                            <button class="btn btn-primary" id="new-datset">Novo arquivo</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-6 show-on-load-dataset" style="display:none;">
+                                                        <p class="number-attributes">Número de atributos: <span></span>
+                                                        </p>
+                                                        <p class="number-instances">Número de instâncias: <span></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row" id="row-attributes">
+                                                    <div class="col-xs-6">
+                                                        <div class="panel panel-default panel-attribute" id="dataset-panel-attribute">
+                                                            <div class="panel-heading">
+                                                                <h3 class="panel-title">Atributos</h3>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <p id="attr-txt">Nenhum arquivo selecionado</p>
+                                                            </div>
+                                                            <!-- /.panel-body -->
+                                                        </div>
+                                                        <!-- /.panel -->
+                                                    </div>
+                                                    <!-- /.col-xs-6 -->
+                                                    <div class="col-xs-6 visualize-attribute">
+                                                        <div class="panel panel-default panel-attribute" id="dataset-panel-attribute-visualize">
+                                                            <div class="panel-heading">
+                                                                <h3 class="panel-title">Estatísticas do atributo</h3>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <!-- panel para estatísticas do atributo -->
+                                                            </div>
+                                                            <!-- /.panel-body -->
+                                                        </div>
+                                                        <!-- /.panel -->
+                                                    </div>
+                                                    <!-- /.col-xs-6.visualize-attribute -->
+                                                </div>
+                                                <!-- /#row-attributes -->
+                                            </div>
+                                            <!-- /.tab-pane#dataset-file -->
+                                            <div role="tabpanel" class="tab-pane" id="dataset-visualize">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div class="scatterplot-matrix-brushing" id="svg-scatterplot-matrix-brushing"></div>
+                                                        <!-- /.scatterplot-matrix-brushing -->
+                                                        <div class="svg-container" id="svg-plot-dataset"></div>
+                                                        <!-- /.svg-container#svg-plot-dataset -->
+                                                        <div id="svg-nominal-plot" class="svg-nominal-plot"></div>
+                                                    </div>
+                                                    <!-- /.col-xs-12 -->
+                                                </div>
+                                                <!-- /.row -->
+                                            </div>
+                                            <!-- /.tab-pane#dataset-visualize -->
+                                        </div>
+                                        <!-- /.tab-content.tab-content-dataset -->
+                                    </div>
+                                    <!-- /.tab-panel-model -->
+                                </div>
+                                <!-- /.col-xs-12 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.item-view#dataset-view -->
+                    </div>
+                    <!-- /.tab-pane#dataset -->
+
+                    <div id="cluster" class="tab-pane">
+                        <h1 class="page-header">Agrupamento</h1>
+
+                        <div id="cluster-view" class="item-view">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p>Selecione o modelo</p>
+                                    <div role="tabpanel" class="tab-panel-model">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a href="#model-kmeans" aria-controls="model-kmeans" role="tab" data-toggle="tab">k-Means</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#model-dbscan" aria-controls="model-dbscan" role="tab" data-toggle="tab">DBSCAN</a>
+                                            </li>
+                                        </ul>
+                                        <!-- ./nav-tabs -->
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content tab-content-cluster">
+                                            <div role="tabpanel" class="tab-pane" id="model-kmeans">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-kmenas" role="form">
+                                                    <div class="form-group">
+                                                        <label for="input-k-kmeans" class="col-sm-2 control-label">Valor de K</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" class="form-control" id="input-k-kmeans" name="k" step="1" min="1" placeholder="k 1">
+                                                        </div>
+                                                        <label for="input-maxIterations" class="col-sm-2 control-label">Máximo de iterações</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" class="form-control" id="input-maxIterations" name="maxIterations" min="1" placeholder="maxIterations 500">
+                                                        </div>
+                                                        <div class="col-xs-3">
+                                                            <input type="hidden" name="model" value="kmeans">
+                                                            <button type="submit" class="btn btn-primary">Executar</button>
+                                                            <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-kmenas -->
+
+                                                <div class="model-result" id="model-result-kmeans" style="display: none;">
+                                                    <div class="model-result-info" id="model-result-info-kmeans">
+                                                        <p class="model-info-text" data-info="iterations">Número de iterações realizadas: <span></span>
+                                                        </p>
+                                                        <p class="model-info-text" data-info="sse">Soma do Erro Quadrático: <span></span>
+                                                        </p>
+                                                        <p class="model-info-text" data-info="ssbtotal">SSB Total: <span></span>
+                                                        </p>
+
+                                                    </div>
+                                                    <!-- /.model-result-info#model-result-info-kmeans -->
+                                                    <div id="svg-container-kmeans" class="svg-container"></div>
+                                                    <div id="table-cluster-kmeans"></div>
+                                                </div>
+                                                <!-- /.model-result#model-result-kmeans -->
+
+                                            </div>
+                                            <!-- /.tab-pane#model-kmeans -->
+
+                                            <div role="tabpanel" class="tab-pane" id="model-dbscan">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-dbscan" role="form">
+                                                    <div class="form-group">
+                                                        <label for="min-points" class="col-sm-2 control-label">Mínimo de pontos</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" name="minPts" class="form-control" id="min-points" step="1" min="1" placeholder="minPts 6">
+                                                        </div>
+                                                        <label for="epson" class="col-sm-1 control-label">Épsilon</label>
+                                                        <div class="col-xs-3">
+                                                            <input type="number" name="eps" class="form-control" id="epson" step="any" min="0" placeholder="eps 0.9">
+                                                        </div>
+                                                        <div class="col-xs-2">
+                                                            <input type="hidden" name="model" value="dbscan">
+                                                            <button type="submit" class="btn btn-primary">Executar</button>
+                                                            <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-dbscan -->
+
+                                                <div class="model-result" id="model-result-dbscan" style="display: none;">
+                                                    <div class="model-result-info" id="model-result-info-dbscan">
+                                                        <!-- <p class="model-info-text" data-info="iterations">Número de iterações realizadas: <span></span></p>
+                            <p class="model-info-text" data-info="sse">Soma do Erro Quadrático: <span></span></p> -->
+
+                                                    </div>
+                                                    <!-- /.model-result-info#model-result-info-dbscan -->
+                                                    <div id="svg-container-dbscan" class="svg-container"></div>
+                                                    <div id="table-cluster-dbscan"></div>
+                                                </div>
+                                                <!-- /.model-result#model-result-dbscan -->
+
+                                            </div>
+                                            <!-- /.tab-pane#model-dbscan -->
+
+                                        </div>
+                                        <!-- /.tab-content.tab-content-cluster -->
+                                    </div>
+                                    <!-- /.tab-panel-model -->
+                                </div>
+                                <!-- /.col-xs-12 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.item-view -->
+                    </div>
+                    <!-- /.tab-pane#cluster -->
+
+                    <div id="classify" class="tab-pane">
+                        <h1 class="page-header">Classificação</h1>
+                        <div id="classify-view" class="item-view">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p>Selecione o modelo</p>
+                                    <div role="tabpanel" class="tab-panel-model">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a href="#model-knn" aria-controls="model-knn" role="tab" data-toggle="tab">kNN</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#model-id3" aria-controls="model-id3" role="tab" data-toggle="tab">ID3</a>
+                                            </li>
+                                        </ul>
+                                        <!-- ./nav-tabs -->
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content tab-content-classify">
+                                            <div role="tabpanel" class="tab-pane" id="model-knn">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-knn" role="form">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <div class="test-options" data-model="knn" id="test-options-knn"></div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <label for="value-k" class="l-inline">
+                                                                <span>Valor de K</span>
+                                                                <input type="number" name="k" class="form-control" id="value-k" step="2" min="1" placeholder="k 3">
+                                                            </label>
+                                                            <label class="l-inline">
+                                                                <input type="hidden" name="model" value="knn">
+                                                                <button type="submit" class="btn btn-primary">Executar</button>
+                                                                <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-knn -->
+
+                                                <div class="model-result" id="model-result-knn" style="display: none;">
+                                                    <div class="model-confusion-matrix" id="model-confusion-matrix-knn"></div>
+                                                    <!-- /.model-confusion-matrix#model-confusion-matrix-knn -->
+                                                    <div id="svg-container-knn" class="svg-container" style="display: none;"></div>
+                                                    <!-- /.svg-container#svg-container-knn -->
+                                                </div>
+                                                <!-- /.model-result#model-result-knn -->
+
+                                            </div>
+                                            <!-- /.tab-pane#model-knn -->
+
+                                            <div role="tabpanel" class="tab-pane" id="model-id3">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-id3" role="form">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <div class="test-options" data-model="id3" id="test-options-id3"></div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <input type="hidden" name="model" value="id3">
+                                                            <button type="submit" class="btn btn-primary">Executar</button>
+                                                            <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-id3 -->
+                                                <div class="model-result" id="model-result-id3" style="display: none;">
+                                                    <div class="model-confusion-matrix" id="model-confusion-matrix-id3"></div>
+                                                    <!-- /.model-confusion-matrix#model-confusion-matrix-id3 -->
+                                                    <div id="svg-container-id3" class="svg-container"></div>
+                                                    <!-- /.svg-container#svg-container-id3 -->
+                                                </div>
+                                                <!-- /.model-result#model-result-id3 -->
+                                            </div>
+                                            <!-- /.tab-pane#model-id3 -->
+                                        </div>
+                                        <!-- /.tab-content-classify -->
+                                    </div>
+                                    <!-- /.tab-panel-model -->
+                                </div>
+                                <!-- /.col-xs-12 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.item-view#classify-view -->
+
+                    </div>
+                    <!-- /.tab-pane#classify -->
+
+                    <div id="regression" class="tab-pane">
+                        <h1 class="page-header">Regressão</h1>
+                        <div id="regression-view" class="item-view">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p>Regressão Linear</p>
+                                    <div role="tabpanel" class="tab-panel-model">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="nactive">
+                                                <a href="#model-graddescent" aria-controls="model-graddescent" role="tab" data-toggle="tab">Gradiente Descendente</a>
+                                            </li>
+                                        </ul>
+                                        <!-- ./nav-tabs -->
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content tab-content-classify">
+                                            <div role="tabpanel" class="tab-pane nactive" id="model-graddescent">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-gradientdescent" role="form">
+                                                    <div class="form-group">
+                                                        <label for="value-alpha" class="col-sm-2 control-label">Taxa de aprendizagem</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" name="alpha" step="any" min="0" class="form-control" id="value-alpha" placeholder="alpha 0.001">
+                                                        </div>
+                                                        <label for="value-precision" class="col-sm-2 control-label">Precisão</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" name="precision" step="any" min="0" class="form-control" id="value-precision" placeholder="precision 0.0001">
+                                                        </div>
+                                                        <label for="value-maxIterations" class="col-sm-2 control-label">Máximo de iterações </label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" name="maxIterations" class="form-control" id="value-maxIterations" step="50" min="0" placeholder="maxIterations 500">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-xs-2">
+                                                            <input type="hidden" name="model" value="gradientdescent">
+                                                            <input type="hidden" name="saveError" value="true">
+                                                            <button type="submit" class="btn btn-primary">Executar</button>
+                                                            <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-gradientdescent -->
+
+                                                <div class="model-result" id="model-result-info-gradientdescent" style="display: none;">
+                                                    <div class="row">
+                                                        <div class="col-xs-6">
+                                                            <div id="w-eq-weights-grad">
+                                                                <p>Equação encontrada pelo modelo</p>
+                                                                <div id="eq-weights-grad"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <p class="model-info-text" data-info="numIterations">Número de iterações: <span></span>
+                                                            </p>
+                                                            <p class="model-info-text" data-info="mse">Erro médio quadrático: <span></span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-xs-12">
+                                                            <div id="svg-container-gradientdescent" class="svg-container"></div>
+                                                            <!-- /.svg-container#svg-container-gradientdescent -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.model-result#model-result-gradientdescent -->
+                                            </div>
+                                            <!-- /.tab-pane#model-graddescent -->
+                                        </div>
+                                        <!-- /.tab-panel-model -->
+                                    </div>
+                                    <!-- /.col-xs-12 -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.item-view#regression-view -->
+                        </div>
+                        <!-- ./#regression -->
+                    </div>
+                    
+                    <div id="localsearch" class="tab-pane">
+                        <h1 class="page-header">Busca Local</h1>
+
+                        <div id="localsearch-view" class="item-view">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p>Selecione o modelo</p>
+                                    <div role="tabpanel" class="tab-panel-model">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a href="#model-annealing" aria-controls="model-annealing" role="tab" data-toggle="tab">Simulated Annealing</a>
+                                            </li>
+                                        </ul>
+                                        <!-- ./nav-tabs -->
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content tab-content-localsearch">
+                                            <div role="tabpanel" class="tab-pane" id="model-annealing">
+                                                <form action="#" method="POST" class="form-horizontal form-options-model" id="options-model-annealing" role="form">
+                                                    <div class="form-group">
+                                                        <label for="input-temperatura" class="col-sm-2 control-label">Temperatura Inicial</label>
+                                                        <div class="col-xs-2">
+                                                            <input type="number" class="form-control" id="input-temperatura" name="temperatura" step="1" min="1" value="100">
+                                                        </div>
+                                                        
+                                                        <label for="input-resfriamento" class="col-sm-2 control-label">Programação do Resfriamento</label>
+                                                        <div class="col-xs-2">
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" name="resfriamento" id="input-resfriamento" value="linear" checked="checked">
+                                                                    Linear
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" name="resfriamento" id="input-resfriamento" value="quadratico">
+                                                                    Quadrático
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-xs-3">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" value="true" id="input-exibirmelhor" name="exibirmelhor">
+                                                                    Exibir melhor solução
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-xs-1">
+                                                            <input type="hidden" name="model" value="annealing">
+                                                            <button type="submit" class="btn btn-primary">Executar</button>
+                                                            <span class="glyphicon glyphicon-refresh glyphicon-spin" style="display: none;"></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- ./ .form-options-model#options-model-annealing -->
+
+                                                <div class="model-result" id="model-result-annealing" style="display: none;">
+                                                    <div class="model-result-info" id="model-result-info-annealing">
+                                                        <p class="model-info-text" data-info="temperatura">Temperatura: <span id="spantemperatura"></span></p>
+                                                        <p class="model-info-text" data-info="energia">Energia (custo): <span id="spanenergia"></span></p>
+                                                        <p class="model-info-text" data-info="melhorenergia">Melhor Energia (menor custo): <span id="melhorenergia"></span></p>
+                                                    </div>
+                                                    <!-- /.model-result-info#model-result-info-annealing -->
+                                                    <!-- <div id="svg-container-annealing" class="svg-container"></div> -->
+                                                    <div class="text-center">
+                                                        <canvas id="canvas1" width="640" height="480" style="border:1px solid #c3c3c3;">
+                                                            Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+                                                        </canvas>
+                                                    </div>
+                                                    <!-- <div id="table-localsearch-annealing"></div> -->
+                                                </div>
+                                                <!-- /.model-result#model-result-annealing -->
+                                            </div>
+                                            <!-- /.tab-pane#model-annealing -->
+
+                                        </div>
+                                        <!-- /.tab-content.tab-content-localsearch -->
+                                    </div>
+                                    <!-- /.tab-panel-model -->
+                                </div>
+                                <!-- /.col-xs-12 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.item-view -->
+                    </div>
+                    <!-- /.tab-pane#localsearch -->
+
+                </div>
+            </div>
+            <!-- ./main -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- dependências externas para a GUI -->
+    <script src="js/jquery-1.12.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/metisMenu.min.js"></script>
+    <script src="js/form2js.js"></script>
+    <script src="js/handlebars.min.js"></script>
+
+    <!-- dependências externas ml.js -->
+    <script src="../src/lib/d3.min.js"></script>
+    <script src="../src/lib/d3pie.min.js"></script>
+    <script src="../src/lib/filereader.js"></script>
+    <!-- dependências ml.js -->
+    <script src="../src/utils.js"></script>
+    <script src="../src/dataSet.js"></script>
+    <script src="../src/plot.js"></script>
+    <script src="../src/confusionMatrix.js"></script>
+
+    <!-- modelos -->
+    <script src="../src/ml.models.js"></script>
+
+    <!-- Forma separada
+    <script src="../src/ml.kmeans.js"></script>
+    <script src="../src/ml.dbscan.js"></script>
+    <script src="../src/ml.knn.js"></script>
+    <script src="../src/ml.id3.js"></script>
+    <script src="../src/ml.linearRegressionGradientDescent.js"></script> -->
+    <script src="../src/ml.annealing.js"></script>
+
+    <!-- scripts para GUI -->
+    <script src="js/gui.index.js"></script>
+
+    <!-- handlebars templates -->
+    <!-- template para linha da lista de atributos contendo o botão para
+mostrar/esconder os detalhes do atributo -->
+    <script id="attribute-template" type="text/x-handlebars-template">
+        <div class="input-group input-attribute">
+            <input type="text" class="form-control" value="{{attr_name}}" disabled aria-label="">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default btn-toggle-statistic" data-toggle="item" data-collapse="{{collapse}}" data-target="#statistic-{{id}}" data-col="{{attr_column}}" data-type="{{attr_type}}" aria-label="Visualizar">
+                    <span class="glyphicon glyphicon-question-sign"></span>
+                </button>
+            </div>
+        </div>
+    </script>
+    <!-- /#statistic-attribute-template -->
+
+    <!-- template para detalhes de um atributo -->
+    <script id="statistic-attribute-template" type="text/x-handlebars-template">
+        <div id="statistic-{{id}}" class="statistic-attribute-template collapse">
+            <p>{{attr_name}}</p>
+            {{#if isNumeric}}
+            <table class="table table-hover table-condensed table-statistic  table-statistic-numeric">
+                <thead>
+                    <tr>
+                        <th>Estatística</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Minímio</td>
+                        <td>{{statistic.min}}</td>
+                    </tr>
+                    <tr>
+                        <td>Máximo</td>
+                        <td>{{statistic.max}}</td>
+                    </tr>
+                    <tr>
+                        <td>Média</td>
+                        <td>{{fixed2 statistic.average 4}}</td>
+                    </tr>
+                    <tr>
+                        <td>Mediana</td>
+                        <td>{{statistic.median}}</td>
+                    </tr>
+                    <tr>
+                        <td>Desvio padrão</td>
+                        <td>{{fixed2 statistic.stdDev 4}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {{else}}
+            <table class="table table-hover table-condensed table-statistic table-statistic-nominal">
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Quantidade</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each statistic}}
+                    <tr>
+                        <td>{{@key}}</td>
+                        <td>{{this}}</td>
+                        <td>{{percent this}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{/if}}
+        </div>
+    </script>
+    <!-- /#statistic-attribute-template -->
+
+    <!-- template para opções de teste dos modelos de classificação -->
+    <script id="test-options-template" type="text/x-handlebars-template">
+        <div class="container-test-options">
+            <label class="radio-inline">
+                <input type="radio" name="test-option" data-toggle=".p-split" value="full-dataset">
+                <span>Porcentagem de treinamento</span>
+                <input type="number" min="1" step="1" value="66" class="form-control p-split hh hz" name="percentSplit" id="test-option-percent-split-{{model}}" style="display:none;">
+            </label>
+            <label class="radio-inline">
+                <input type="radio" data-toggle=".p-split, .folds" name="test-option" value="holdout" checked="checked">
+                <span>Holdout</span>
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="test-option" data-toggle=".folds" value="cross-validation">
+                <span>Validação cruzada</span>
+            </label>
+            <label class="radio-inline folds hh" style="display:none;">
+                <span>Número de Partições</span>
+                <input type="number" name="folds" min="2" step="1" class="form-control hz" placeholder="folds 10">
+            </label>
+        </div>
+    </script>
+    <!-- /#test-options-template -->
+
+    <!-- template para matriz de confusão -->
+    <script id="cm-template" type="text/x-handlebars-template">
+        <table class="table table-hover">
+            <tbody>
+                {{tbody matrix}}
+            </tbody>
+        </table>
+    </script>
+    <!-- /#cm-template -->
+
+    <script id="pie-chart-template" type="text/x-handlebars-template">
+        <div class="container-pie-chart">
+            <h4 class="title-attribute-pie-chart">{{name}}</h4>
+            <div id="{{id}}"></div>
+        </div>
+    </script>
+
+    <script id="cv-table-template" type="text/x-handlebars-template">
+        <div class="container-cv" id="cross-validation-{{id}}" style="display:none">
+            <p>Detalhe por partição</p>
+            <div id="cv-table-{{id}}"></div>
+            <p>Melhor classificador</p>
+        </div>
+    </script>
+
+    <script id="cluster-table-template" type="text/x-handlebars-template">
+        <table class="table table-hover">
+            <tr>
+                <th>Cluster</th>
+                <th>#instâncias</th>
+                <th>%</th>
+            </tr>
+            <tbody>
+                {{#cluster}}
+                <tr>
+                    <td>{{label}}</td>
+                    <td>{{size}}</td>
+                    <td>{{psize}}</td>
+                </tr>
+                {{/cluster}}
+            </tbody>
+        </table>
+    </script>
+
+</body>
+
+</html>
